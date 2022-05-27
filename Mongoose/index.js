@@ -1,6 +1,5 @@
 // CURD API Using Mongoose.
 // Mongoose is an ODM (Object database Modelling) library for Node.js that defines objects with a schema mapped to a MongoDB document.
-
 const express= require("express");
 const product= require("./product");
 const conn= require("./config");
@@ -35,11 +34,16 @@ app.put("/:_id",async(req,res)=>{
 app.delete("/:_id",async(req,res)=>{
 
     const data=await product.deleteOne(
-        {_id:objId(req.params._id)}
+        req.params
         );
     res.send(data);
 });
-
-
-//initialized server at port 8000
+//search Api
+app.get("/search/:key",async(req,res)=>{
+        let data= await product.find({
+          "name":{$regex:req.params.key}
+        })
+    res.send(data);
+});
+//initialized server at port 8000git
 app.listen(8000);
